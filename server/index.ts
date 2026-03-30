@@ -76,7 +76,7 @@ app.post('/api/generate', async (req, res) => {
 // Serve Vite build output in production
 const distPath = path.resolve(__dirname, '..', 'dist')
 app.use(express.static(distPath))
-app.get('*', (_req, res) => {
+app.use((_req, res) => {
   res.sendFile(path.join(distPath, 'index.html'))
 })
 
