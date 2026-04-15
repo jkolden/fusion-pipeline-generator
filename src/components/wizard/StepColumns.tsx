@@ -12,19 +12,25 @@ interface StepColumnsProps {
   dedup: DedupConfig
   extractionType: ExtractionType
   onUpdateColumn: (index: number, payload: Partial<ColumnDef>) => void
+  onSetColumns: (columns: ColumnDef[]) => void
   onSetDedup: (payload: Partial<DedupConfig>) => void
   onBack: () => void
   onNext: () => void
 }
 
-export function StepColumns({ columns, dedup, extractionType, onUpdateColumn, onSetDedup, onBack, onNext }: StepColumnsProps) {
+export function StepColumns({ columns, dedup, extractionType, onUpdateColumn, onSetColumns, onSetDedup, onBack, onNext }: StepColumnsProps) {
   const stagingCount = columns.filter((c) => c.includeInStaging).length
   const pkCount = columns.filter((c) => c.isPrimaryKey).length
+  const allSelected = columns.length > 0 && stagingCount === columns.length
   const validation = validateStep2(columns, dedup, extractionType)
   const showDedup = extractionType === 'BICC'
   const showXmlPath = extractionType === 'OTBI'
 
   const stagingColumns = columns.filter((c) => c.includeInStaging)
+
+  const toggleAll = (include: boolean) => {
+    onSetColumns(columns.map((c) => ({ ...c, includeInStaging: include })))
+  }
 
   return (
     <Card className="mx-auto max-w-5xl">
@@ -33,6 +39,14 @@ export function StepColumns({ columns, dedup, extractionType, onUpdateColumn, on
           Column Configuration
           <Badge variant="secondary">{stagingCount} of {columns.length} selected</Badge>
           {pkCount > 0 && <Badge>{pkCount} PK</Badge>}
+          <Button
+            variant="outline"
+            size="sm"
+            className="ml-auto text-xs"
+            onClick={() => toggleAll(!allSelected)}
+          >
+            {allSelected ? 'Deselect All' : 'Select All'}
+          </Button>
         </CardTitle>
         <CardDescription>
           Select which columns to include in staging, assign Oracle types, and designate keys

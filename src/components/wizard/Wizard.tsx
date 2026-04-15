@@ -71,6 +71,7 @@ export function Wizard({ apiKey, onOpenApiKey }: WizardProps) {
           dedup={wizard.config.dedup}
           extractionType={wizard.config.extractionType}
           onUpdateColumn={wizard.updateColumn}
+          onSetColumns={wizard.setColumns}
           onSetDedup={wizard.setDedup}
           onBack={() => wizard.setStep(1)}
           onNext={() => wizard.setStep(3)}

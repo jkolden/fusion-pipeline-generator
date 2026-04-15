@@ -5,9 +5,13 @@ import { generateWithClaude } from './provider.ts'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
-const PORT = Number(process.env.PORT) || 3001
+const PORT = 3001
 
 app.use(express.json({ limit: '10mb' }))
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok' })
+})
 
 app.post('/api/generate', async (req, res) => {
   req.setTimeout(300000) // 5 min timeout for Claude generation
@@ -75,11 +79,17 @@ app.post('/api/generate', async (req, res) => {
 
 // Serve Vite build output in production
 const distPath = path.resolve(__dirname, '..', 'dist')
+console.log(`[server] Serving static files from: ${distPath}`)
 app.use(express.static(distPath))
 app.use((_req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'))
+  res.sendFile(path.join(distPath, 'index.html'), (err) => {
+    if (err && !res.headersSent) {
+      console.error('[server] sendFile error:', err)
+      res.status(500).send('Frontend not built — dist/index.html missing')
+    }
+  })
 })
 
-app.listen(PORT, () => {
-  console.log(`[server] Pipeline Generator running on http://localhost:${PORT}`)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`[server] Pipeline Generator running on http://0.0.0.0:${PORT}`)
 })
