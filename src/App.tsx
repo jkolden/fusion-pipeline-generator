@@ -44,6 +44,16 @@ function App() {
       <div style={{ display: activePage === 'setup' ? undefined : 'none' }}>
         <SetupPage />
       </div>
+      <footer className="text-center py-4 text-xs text-[var(--muted-foreground)]">
+        <a
+          href="https://github.com/jkolden/fusion-pipeline-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline"
+        >
+          github.com/jkolden/fusion-pipeline-generator
+        </a>
+      </footer>
     </div>
   )
 }
