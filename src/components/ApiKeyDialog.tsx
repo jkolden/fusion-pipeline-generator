@@ -27,9 +27,16 @@ export function ApiKeyDialog({ open, apiKey, onSave, onClose }: ApiKeyDialogProp
           <KeyRound className="h-5 w-5 text-[var(--primary)]" />
           <h2 className="text-lg font-semibold">Claude API Key</h2>
         </div>
+        <p className="mb-3 text-sm text-[var(--muted-foreground)]">
+          This tool uses the{' '}
+          <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-[var(--foreground)]">
+            Anthropic API
+          </a>{' '}
+          (Claude). OpenAI, Gemini, and other providers are not supported.
+        </p>
         <p className="mb-4 text-sm text-[var(--muted-foreground)]">
-          Your API key is stored locally in your browser and only sent to the local proxy server.
-          It is never sent to any third-party service.
+          Your key is stored only in your browser and sent directly to Anthropic — never stored on any server.
+          Keys start with <code className="text-xs bg-[var(--muted)] px-1 py-0.5 rounded">sk-ant-</code>.
         </p>
         <div className="space-y-2">
           <Label htmlFor="api-key">API Key</Label>
